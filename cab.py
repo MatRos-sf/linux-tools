@@ -17,7 +17,7 @@ from dotenv import dotenv_values
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
-SCRIPT_DIR = Path(__file__).parent
+SCRIPT_DIR = Path(__file__).resolve().parent
 RAW_FILE_NAME = SCRIPT_DIR / Path("_raw_audio.raw")
 INFO_FILE = SCRIPT_DIR / Path("_info.json")
 PID = None
