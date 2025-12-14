@@ -14,6 +14,8 @@ from typing import Any
 
 from dotenv import dotenv_values
 
+from audio import audio_strip
+
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
@@ -51,6 +53,11 @@ parser.add_argument(
     type=str,
     help='Input device. Use command `pactl list sources | grep -E "Name:|monitor"` to get list of available devices',
     required=False,
+)
+parser.add_argument(
+    "--remove_silence",
+    action="store_true",
+    help="Remove silence from the begging and end of the audio.",
 )
 
 args = parser.parse_args()
@@ -190,6 +197,8 @@ def main():
         new_name = Path(args.destination) / Path(args.file_name)
         try:
             convert_audio(new_name)
+            if args.remove_silence:
+                audio_strip(new_name)
         except subprocess.CalledProcessError as e:
             logger.error(f"Failed to convert audio: {e}")
             show_notification("Recording stopped", "Failed to convert audio")
